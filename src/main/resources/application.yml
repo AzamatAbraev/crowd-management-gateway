@@ -26,9 +26,18 @@ spring:
         - TokenRelay
 
       routes:
-        - id: crowd-management-api
+        - id: crowd-management-demo
           uri: http://localhost:8081
           predicates:
             - Path=/demo/**
           filters:
             - PrefixPath=/api/v1
+
+        - id: crowd-management-analytics
+          uri: http://localhost:8081
+          predicates:
+            - Path=/analytics/**
+          filters:
+            - PrefixPath=/api/v1
+
+
