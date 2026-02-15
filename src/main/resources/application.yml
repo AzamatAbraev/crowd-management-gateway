@@ -1,10 +1,16 @@
 server:
   port: 8082
 
+  reactive:
+    session:
+      cookie:
+        same-site: lax
+        secure: false
 
 spring:
   application:
     name: crowd-management-gateway
+
 
   security:
     oauth2:
@@ -15,6 +21,7 @@ spring:
             client-id: gateway
             client-secret: CE0TlwAp5otsTBTUnF4HBSp9RClrwVct
             scope: openid, profile, email
+            redirect-uri: http://localhost:8082/login/oauth2/code/keycloak
         provider:
           keycloak:
             issuer-uri: http://localhost:8080/realms/crowd-management
@@ -24,20 +31,28 @@ spring:
     gateway.server.webflux:
       default-filters:
         - TokenRelay
-
       routes:
-        - id: crowd-management-demo
+        - id: crowd-management-api
           uri: http://localhost:8081
           predicates:
-            - Path=/demo/**
+            - Path=/resources/**
           filters:
             - PrefixPath=/api/v1
 
-        - id: crowd-management-analytics
+        - id: crowd-management-ws
           uri: http://localhost:8081
           predicates:
-            - Path=/analytics/**
+            - Path=/ws/**
           filters:
-            - PrefixPath=/api/v1
+            - PreserveHostHeader
+
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
 
 
