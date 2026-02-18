@@ -56,3 +56,9 @@ spring:
             allowCredentials: true
 
 
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug

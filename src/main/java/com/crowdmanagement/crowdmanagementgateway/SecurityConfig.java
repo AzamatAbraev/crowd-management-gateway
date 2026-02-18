@@ -44,7 +44,6 @@ public class SecurityConfig {
                         ))
                 .oauth2Client(Customizer.withDefaults())
                 .logout(logout -> logout
-                        .requiresLogout(ServerWebExchangeMatchers.pathMatchers(HttpMethod.GET, "/logout"))
                         .logoutSuccessHandler(oidcLogoutSuccessHandler())
                 );
 
