@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/login/**", "/oauth2/**").permitAll()
-                        .pathMatchers("/ws/**").permitAll()
+                        .pathMatchers("/people/**").permitAll()
                         .pathMatchers("/resources/**").authenticated()
                         .anyExchange().authenticated()
                 )
@@ -69,7 +69,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-        configuration.setAllowCredentials(true); // This is required for cookies/sessions
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
