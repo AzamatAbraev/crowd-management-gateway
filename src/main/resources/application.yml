@@ -39,19 +39,26 @@ spring:
           filters:
             - PrefixPath=/api/v1
 
+        - id: crowd-management-devices
+          uri: http://localhost:8081
+          predicates:
+            - Path=/devices/**
+          filters:
+            - PrefixPath=/api/v1
+
+        - id: crowd-management-buildings
+          uri: http://localhost:8081
+          predicates:
+            - Path=/buildings/**
+          filters:
+            - PrefixPath=/api/v1
+
         - id: crowd-management-people-counter
           uri: http://localhost:8081
           predicates:
             - Path=/people/**
           filters:
             - PrefixPath=/api/v1
-
-#        - id: crowd-management-ws
-#          uri: ws://localhost:8081
-#          predicates:
-#            - Path=/ws/occupancy/**
-#          filters:
-#            - PreserveHostHeader
 
 
       globalcors:
