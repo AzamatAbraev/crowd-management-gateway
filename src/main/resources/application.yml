@@ -39,6 +39,13 @@ spring:
           filters:
             - PrefixPath=/api/v1
 
+        - id: crowd-management-users
+          uri: http://localhost:8081
+          predicates:
+            - Path=/user/**
+          filters:
+            - PrefixPath=/api/v1
+
         - id: crowd-management-devices
           uri: http://localhost:8081
           predicates:
