@@ -67,6 +67,13 @@ spring:
           filters:
             - PrefixPath=/api/v1
 
+        - id: crowd-management-admin-users
+          uri: http://localhost:8081
+          predicates:
+            - Path=/admin/users/**
+          filters:
+            - RewritePath=/admin/users(?<segment>/?.*), /api/v1/users${segment}
+
 
       globalcors:
         cors-configurations:
