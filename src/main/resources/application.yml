@@ -1,6 +1,5 @@
 server:
   port: 8082
-
   reactive:
     session:
       cookie:
@@ -10,8 +9,6 @@ server:
 spring:
   application:
     name: crowd-management-gateway
-
-
   security:
     oauth2:
       client:
@@ -20,77 +17,67 @@ spring:
             provider: keycloak
             client-id: gateway
             client-secret: CE0TlwAp5otsTBTUnF4HBSp9RClrwVct
+            authorization-grant-type: authorization_code
             scope: openid, profile, email
             redirect-uri: http://localhost:8082/login/oauth2/code/keycloak
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8080/realms/crowd-management
-
-
   cloud:
-    gateway.server.webflux:
-      default-filters:
-        - TokenRelay
-      routes:
-        - id: crowd-management-api
-          uri: http://localhost:8081
-          predicates:
-            - Path=/resources/**
-          filters:
-            - PrefixPath=/api/v1
-
-        - id: crowd-management-users
-          uri: http://localhost:8081
-          predicates:
-            - Path=/user/**
-          filters:
-            - PrefixPath=/api/v1
-
-        - id: crowd-management-analytics
-          uri: http://localhost:8081
-          predicates:
-            - Path=/analytics/**
-          filters:
-            - PrefixPath=/api/v1
-
-        - id: crowd-management-devices
-          uri: http://localhost:8081
-          predicates:
-            - Path=/devices/**
-          filters:
-            - PrefixPath=/api/v1
-
-        - id: crowd-management-buildings
-          uri: http://localhost:8081
-          predicates:
-            - Path=/buildings/**
-          filters:
-            - PrefixPath=/api/v1
-
-        - id: crowd-management-people-counter
-          uri: http://localhost:8081
-          predicates:
-            - Path=/people/**
-          filters:
-            - PrefixPath=/api/v1
-
-        - id: crowd-management-admin-users
-          uri: http://localhost:8081
-          predicates:
-            - Path=/admin/users/**
-          filters:
-            - RewritePath=/admin/users(?<segment>/?.*), /api/v1/users${segment}
-
-
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:5173"
-            allowedMethods: "*"
-            allowedHeaders: "*"
-            allowCredentials: true
-
-
+    gateway:
+      server:
+        webflux:
+          default-filters:
+            - TokenRelay
+          routes:
+            - id: crowd-management-api
+              uri: "http://crowd-management-api:8081"
+              predicates:
+                - Path=/resources/**
+              filters:
+                - PrefixPath=/api/v1
+            - id: crowd-management-users
+              uri: "http://crowd-management-api:8081"
+              predicates:
+                - Path=/user/**
+              filters:
+                - PrefixPath=/api/v1
+            - id: crowd-management-analytics
+              uri: "http://crowd-management-api:8081"
+              predicates:
+                - Path=/analytics/**
+              filters:
+                - PrefixPath=/api/v1
+            - id: crowd-management-devices
+              uri: "http://crowd-management-api:8081"
+              predicates:
+                - Path=/devices/**
+              filters:
+                - PrefixPath=/api/v1
+            - id: crowd-management-buildings
+              uri: "http://crowd-management-api:8081"
+              predicates:
+                - Path=/buildings/**
+              filters:
+                - PrefixPath=/api/v1
+            - id: crowd-management-people-counter
+              uri: "http://crowd-management-api:8081"
+              predicates:
+                - Path=/people/**
+              filters:
+                - PrefixPath=/api/v1
+            - id: crowd-management-admin-users
+              uri: "http://crowd-management-api:8081"
+              predicates:
+                - Path=/admin/users/**
+              filters:
+                - RewritePath=/admin/users(?<segment>/?.*), /api/v1/users${segment}
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:5173"
+                  - "http://frontend"
+                allowedMethods: "*"
+                allowedHeaders: "*"
+                allowCredentials: true
 
 logging:
   level:
