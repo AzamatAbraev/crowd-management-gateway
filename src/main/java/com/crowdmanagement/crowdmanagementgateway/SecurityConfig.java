@@ -3,8 +3,10 @@ package com.crowdmanagement.crowdmanagementgateway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -16,6 +18,7 @@ import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,16 +54,41 @@ public class SecurityConfig {
         return http.build();
     }
 
+//    @Bean
+//    public ServerLogoutSuccessHandler oidcLogoutSuccessHandler() {
+//        OidcClientInitiatedServerLogoutSuccessHandler handler =
+//                new OidcClientInitiatedServerLogoutSuccessHandler(
+//                        clientRegistrationRepository
+//                );
+//
+//        handler.setPostLogoutRedirectUri("http://localhost:5173/");
+//
+//        return handler;
+//    }
+
     @Bean
     public ServerLogoutSuccessHandler oidcLogoutSuccessHandler() {
-        OidcClientInitiatedServerLogoutSuccessHandler handler =
-                new OidcClientInitiatedServerLogoutSuccessHandler(
-                        clientRegistrationRepository
-                );
+        return (exchange, authentication) -> {
+            StringBuilder logoutUrl = new StringBuilder(
+                    "http://localhost:8080/realms/crowd-management"
+                            + "/protocol/openid-connect/logout"
+                            + "?post_logout_redirect_uri=http://localhost:5173/"
+                            + "&client_id=gateway"
+            );
 
-        handler.setPostLogoutRedirectUri("http://localhost:5173/");
+            if (authentication instanceof OAuth2AuthenticationToken oauthToken) {
+                Object idToken = oauthToken.getPrincipal().getAttribute("id_token");
+                if (idToken != null) {
+                    logoutUrl.append("&id_token_hint=").append(idToken);
+                }
+            }
 
-        return handler;
+            exchange.getExchange().getResponse()
+                    .setStatusCode(HttpStatus.FOUND);
+            exchange.getExchange().getResponse().getHeaders()
+                    .setLocation(URI.create(logoutUrl.toString()));
+            return exchange.getExchange().getResponse().setComplete();
+        };
     }
 
     @Bean

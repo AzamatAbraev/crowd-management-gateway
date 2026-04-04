@@ -20,6 +20,8 @@ spring:
             authorization-grant-type: authorization_code
             scope: openid, profile, email
             redirect-uri: http://localhost:8082/login/oauth2/code/keycloak
+
+
   cloud:
     gateway:
       server:

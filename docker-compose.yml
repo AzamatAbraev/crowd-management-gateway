@@ -3,25 +3,17 @@ services:
     build: .
     container_name: gateway
     restart: always
-    # depends_on:
-    # keycloak_app:
-    #   condition: service_healthy
     environment:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_AUTHORIZATION_URI=http://localhost:8080/realms/crowd-management/protocol/openid-connect/auth
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URI=http://keycloak-app:8080/realms/crowd-management/protocol/openid-connect/token
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_INFO_URI=http://keycloak-app:8080/realms/crowd-management/protocol/openid-connect/userinfo
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWK_SET_URI=http://keycloak-app:8080/realms/crowd-management/protocol/openid-connect/certs
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_NAME_ATTRIBUTE=preferred_username
-      # JWT resource server - use JWK set URI only, no issuer-uri validation
+
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak-app:8080/realms/crowd-management/protocol/openid-connect/certs
-      # Route URIs - override host.docker.internal with container name
-      # - SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_URI=http://crowd_management_api:8081
-      # - SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_URI=http://crowd_management_api:8081
-      # - SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_2_URI=http://crowd_management_api:8081
-      # - SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_3_URI=http://crowd_management_api:8081
-      # - SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_4_URI=http://crowd_management_api:8081
-      # - SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_5_URI=http://crowd_management_api:8081
-      # - SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_6_URI=http://crowd_management_api:8081
+
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_END_SESSION_ENDPOINT=http://localhost:8080/realms/crowd-management/protocol/openid-connect/logout
+#      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://keycloak-app:8080/realms/crowd-management
     ports:
       - "8082:8082"
 networks:
