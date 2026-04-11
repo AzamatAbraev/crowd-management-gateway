@@ -1,3 +1,10 @@
+
+
+ >[!IMPORTANT]                                                           
+ > This service is part of the [Crowd Management                        
+  System](https://github.com/AzamatAbraev/crowd-management-system)         monorepo. Clone the full system from there — do not clone this repo      individually. 
+
+
 # Crowd Management Gateway
 
 The API gateway and authentication entry point for the platform. All browser traffic goes through this service. It handles the OAuth2 login flow with Keycloak, attaches the user's access token to every proxied request, and routes traffic to the backend API.
