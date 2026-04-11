@@ -13,7 +13,6 @@ services:
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak-app:8080/realms/crowd-management/protocol/openid-connect/certs
 
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_END_SESSION_ENDPOINT=http://localhost:8080/realms/crowd-management/protocol/openid-connect/logout
-#      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://keycloak-app:8080/realms/crowd-management
     ports:
       - "8082:8082"
 networks:

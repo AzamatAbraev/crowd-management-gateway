@@ -39,32 +39,16 @@ public class SecurityConfig {
                         .pathMatchers("/login/**", "/oauth2/**").permitAll()
                         .pathMatchers("/people/**").permitAll()
                         .pathMatchers("/resources/**").authenticated()
-                        .anyExchange().authenticated()
-                )
+                        .anyExchange().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .authenticationSuccessHandler(
-                                new RedirectServerAuthenticationSuccessHandler("http://localhost:5173/home")
-                        ))
+                                new RedirectServerAuthenticationSuccessHandler("http://localhost:5173/home")))
                 .oauth2Client(Customizer.withDefaults())
                 .logout(logout -> logout
-                        .logoutSuccessHandler(oidcLogoutSuccessHandler())
-                );
-
+                        .logoutSuccessHandler(oidcLogoutSuccessHandler()));
 
         return http.build();
     }
-
-//    @Bean
-//    public ServerLogoutSuccessHandler oidcLogoutSuccessHandler() {
-//        OidcClientInitiatedServerLogoutSuccessHandler handler =
-//                new OidcClientInitiatedServerLogoutSuccessHandler(
-//                        clientRegistrationRepository
-//                );
-//
-//        handler.setPostLogoutRedirectUri("http://localhost:5173/");
-//
-//        return handler;
-//    }
 
     @Bean
     public ServerLogoutSuccessHandler oidcLogoutSuccessHandler() {
@@ -73,8 +57,7 @@ public class SecurityConfig {
                     "http://localhost:8080/realms/crowd-management"
                             + "/protocol/openid-connect/logout"
                             + "?post_logout_redirect_uri=http://localhost:5173/"
-                            + "&client_id=gateway"
-            );
+                            + "&client_id=gateway");
 
             if (authentication instanceof OAuth2AuthenticationToken oauthToken) {
                 Object idToken = oauthToken.getPrincipal().getAttribute("id_token");
