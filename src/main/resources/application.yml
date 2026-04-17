@@ -65,6 +65,12 @@ spring:
                 - Path=/people/**
               filters:
                 - PrefixPath=/api/v1
+            - id: crowd-management-notices
+              uri: "http://crowd-management-api:8081"
+              predicates:
+                - Path=/notices/**
+              filters:
+                - PrefixPath=/api/v1
             - id: crowd-management-admin-users
               uri: "http://crowd-management-api:8081"
               predicates:
